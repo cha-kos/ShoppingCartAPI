@@ -4,8 +4,4 @@ class Dicount {
     this.amount = discount.quantity;
     // this.percent = discount.percent;
   }
-
-  calculate(){
-    return this.amount;
-  }
 }

@@ -2,12 +2,15 @@ class Item {
   constructor(item){
     this.name = item.name;
     this.price = item.price;
-    this.wholesaleDiscount = item.wholesaleDiscount;
+    this.discount = item.discount;
+    this.quantity = item.quantity;
   }
 
-  updateWholesaleDiscount(discount){
-    this.wholesaleDiscount = discount;
+  addDiscount(discount){
+    this.discount = new Discount(discount);
   }
 
-  removeWholesaleDiscount()
+  removeDiscount(){
+    this.discount = undefined;
+  }
 }
