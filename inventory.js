@@ -11,6 +11,10 @@ class Inventory {
     this.items[currentItem.name] = Object.assign({}, this.items[currentItem.name], updateItem);
   }
 
+  removeItem(item){
+    delete this.items[item];
+  }
+
   addItemQuantity(itemName, amount){
     this.items[itemName].quantity += amount;
   }

@@ -2,8 +2,8 @@ class Item {
   constructor(item){
     this.name = item.name;
     this.price = item.price;
-    this.discount = item.discount;
     this.quantity = item.quantity;
+    this.discount = item.discount;
   }
 
   addDiscount(discount){
