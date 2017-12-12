@@ -1,7 +1,9 @@
-class Transaction{
+export default class Transaction{
 
-    constructor(inventory){
-      this.inventory = inventory;
+    constructor(store){
+      super(store);
+      // this.id = store.transactionHistory.length;
+      // this.inventory = store.inventory;
       this.cart = {};
       this.subTotal = 0;
       this.discounts = 0;
@@ -9,21 +11,27 @@ class Transaction{
     }
 
     scanItem(item){
-      if (this.inventory.itemCount[item] > 0 && this.cart[item]){
+      if (store.inventory[item].quantity > 0 && this.cart[item]){
         this.cart[item] += 1;
-      } else {
+      } else if (store.inventory[item].quantity > 0) {
         this.cart[item] = 1;
       }
-      this.cart.total += this.inventory.prices[item];
+
+      if (store.inventory[item].discount && this.cart[item] >= store.inventory[item].discount.quantity){
+        this.discounts += this.invetory[item].discount.amount;
+      }
+
+      this.cart.subTotal += store.inventory.prices[item];
+
+
+
     }
 
     purchase(){
-      this.inventory.cart.forEach((item) => {
-        this.inventory.itemCount[item] -= 1;
+      store.inventory.cart.forEach((item) => {
+        store.inventory.itemCount[item] -= 1;
       });
     }
-
-
 }
 
 

@@ -7,8 +7,8 @@ class Inventory {
     this.items[item.name] = new Item(item);
   }
 
-  updateItem(currentItem, updatedItem) {
-    this.items[currentItem.name] = Object.assign({}, this.items[currentItem.name], updateItem);
+  updateItem(updatedItem) {
+    this.items[updatedItem.name] = Object.assign({}, this.items[updatedItem.name], updateItem);
   }
 
   removeItem(item){
@@ -24,7 +24,7 @@ class Inventory {
   }
 
   updateItemQuantity(itemName, amount){
-    this.items[itemName].quantity += amount;
+    this.items[itemName].quantity = amount;
   }
 
 
