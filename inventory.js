@@ -1,4 +1,6 @@
-class Inventory {
+import Item from "item";
+
+export default class Inventory {
   constructor(items){
     this.items = items;
   }

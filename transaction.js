@@ -10,22 +10,27 @@ export default class Transaction{
       this.total = 0;
     }
 
-    scanItem(item){
-      if (store.inventory[item].quantity > 0 && this.cart[item]){
-        this.cart[item] += 1;
-      } else if (store.inventory[item].quantity > 0) {
-        this.cart[item] = 1;
+    scanItem(item, quantity){
+      if (!quantity) {
+        quantity = 1;
+      }
+
+      if (store.inventory[item].quantity >= quantity && this.cart[item]){
+        this.cart[item] += quantity;
+      } else if (store.inventory[item].quantity >= quantity) {
+        this.cart[item] = quantity;
       }
 
       if (store.inventory[item].discount && this.cart[item] >= store.inventory[item].discount.quantity){
         this.discounts += this.invetory[item].discount.amount;
       }
 
-      this.cart.subTotal += store.inventory.prices[item];
+      this.subTotal += store.inventory.prices[item];
 
-
-
+      this.total = this.subTotal - this.discounts;
     }
+
+    
 
     purchase(){
       store.inventory.cart.forEach((item) => {
@@ -33,15 +38,6 @@ export default class Transaction{
       });
     }
 }
-
-
-const addItem = () => {
-
-};
-
-const calculateDiscount = () => {
-
-};
 
 
 var storeOneInv = new Inventory(items);

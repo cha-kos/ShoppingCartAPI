@@ -1,4 +1,5 @@
 import Transaction from "transaciton";
+import Inventory from "inventory";
 
 class Store {
   constructor(inventory) {
