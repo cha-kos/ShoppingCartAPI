@@ -9,6 +9,9 @@ class Store {
   }
 
   newTransaction(){
+    if (this.currentTransaction){
+      return "Sorry, there is currently an active transaction.";
+    }
     this.currentTransaction = new Transaction(this);
   }
 
