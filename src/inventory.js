@@ -10,7 +10,7 @@ export default class Inventory {
 
   addItem(item) {
     var newItem = new Item(item);
-    this.items[newItem.name] = newItem;
+    this.items[item.name] = newItem;
   }
 
   updateItem(updatedItem) {

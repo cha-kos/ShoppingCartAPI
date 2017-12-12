@@ -14,10 +14,19 @@ class Store {
 
   scan(item, quantity){
     this.currentTransaction.scanItem(item, quantity);
+    return this.currentTransaction.cart;
   }
 
   total(){
     return this.currentTransaction.total;
+  }
+
+  closeTransaction(){
+    this.currentTransaction.purchase();
+    delete this.currentTransaction.store;
+    this.transactionHistory.push(this.currentTransaction);
+    this.currentTransaction = null;
+    return "Transaction Closed";
   }
 }
 
@@ -33,13 +42,13 @@ store.inventory.addItem(itemC);
 store.inventory.addItem(itemD);
 store.newTransaction();
 
-// var cart1 = ["A", "B", "C", "D", "A", "B", "A", "A"];
-//
-// cart1.forEach(item => {
-//   store.scan(item);
-// });
+var cart1 = ["A", "B", "C", "D", "A", "B", "A", "A"];
 
-// var cart2 = ["C", "C", "C", "C", "C", "C", "C", "C", "C", "C", "C", "C", "C", "C"];
+cart1.forEach(item => {
+  store.scan(item);
+});
+
+// var cart2 = ["C", "C", "C", "C", "C", "C", "C"];
 //
 // cart2.forEach(item => {
 //   store.scan(item);

@@ -18,10 +18,10 @@ export default class Transaction{
         this.cart[itemID] = quantity;
       }
 
-
       // if (currentItem.discount && this.cart[itemID] % currentItem.discount.quantity === 0){
       //   this.discounts += currentItem.discount.amount;
       // }
+
       if (currentItem.discount && Math.floor(this.cart[itemID] / currentItem.discount.quantity) !== this.discounts[itemID]){
         this.discounts[itemID] = Math.floor(this.cart[itemID] / currentItem.discount.quantity);
       }
@@ -44,8 +44,8 @@ export default class Transaction{
     }
 
     purchase(){
-      store.inventory.cart.forEach((item) => {
-        store.inventory.itemCount[item] -= 1;
-      });
+      for (let item in this.cart) {
+        store.inventory.items[item].quantity -= this.cart[item];
+      }
     }
 }
