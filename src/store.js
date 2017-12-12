@@ -12,8 +12,8 @@ class Store {
     this.currentTransaction = new Transaction(this);
   }
 
-  scan(item){
-    this.currentTransaction.scanItem(item);
+  scan(item, quantity){
+    this.currentTransaction.scanItem(item, quantity);
   }
 
   total(){

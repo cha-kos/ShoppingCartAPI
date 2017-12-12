@@ -19,20 +19,27 @@ export default class Transaction{
       }
 
 
-      if (currentItem.discount && Math.floor(this.cart[itemID] / currentItem.discount.quantity !== this.discounts[itemID])){
-        this.discounts += currentItem.discount.amount;
+      // if (currentItem.discount && this.cart[itemID] % currentItem.discount.quantity === 0){
+      //   this.discounts += currentItem.discount.amount;
+      // }
+      if (currentItem.discount && Math.floor(this.cart[itemID] / currentItem.discount.quantity) !== this.discounts[itemID]){
+        this.discounts[itemID] = Math.floor(this.cart[itemID] / currentItem.discount.quantity);
       }
 
-      this.subTotal += currentItem.price;
+      this.subTotal += currentItem.price * quantity;
 
       this.calculateTotal();
-
-      // this.total = this.subTotal - this.discounts;
     }
 
     calculateTotal(){
-      for (let item in discounts){
-        this.totalDiscounts = discounts[item] * this.inventory.item.discount.amount;
+      this.updateTotalDiscounts();
+      this.total = this.subTotal - this.totalDiscounts;
+    }
+
+    updateTotalDiscounts(){
+      this.totalDiscounts = 0;
+      for (let item in this.discounts){
+        this.totalDiscounts += this.discounts[item] * this.store.inventory.items[item].discount.amount;
       }
     }
 
