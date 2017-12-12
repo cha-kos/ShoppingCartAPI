@@ -4,7 +4,7 @@ import Inventory from "./inventory.js";
 class Store {
   constructor(inventory) {
     this.inventory = new Inventory(inventory);
-    this.currentTransaction = undefined;
+    this.currentTransaction = null;
     this.transactionHistory = [];
   }
 
@@ -33,14 +33,20 @@ store.inventory.addItem(itemC);
 store.inventory.addItem(itemD);
 store.newTransaction();
 
-var cart1 = ["A", "B", "C", "D", "A", "B", "A", "A"];
+// var cart1 = ["A", "B", "C", "D", "A", "B", "A", "A"];
+//
+// cart1.forEach(item => {
+//   store.scan(item);
+// });
 
-cart1.forEach(item => {
-  store.scan(item);
-});
-
-var cart2 = ["A", "B", "C", "D", "A", "B", "A", "A"];
+var cart2 = ["C", "C", "C", "C", "C", "C", "C", "C", "C", "C", "C", "C", "C", "C"];
 
 cart2.forEach(item => {
   store.scan(item);
 });
+
+// var cart2 = ["A", "B", "C", "D"];
+//
+// cart2.forEach(item => {
+//   store.scan(item);
+// });

@@ -5,7 +5,11 @@ export default class Item {
     this.name = item.name;
     this.price = item.price;
     this.quantity = item.quantity;
-    this.discount = item.discount;
+    if (item.discount){
+      this.discount = new Discount(item.discount);
+    } else {
+      this.discount = null;
+    }
   }
 
   addDiscount(discount){
@@ -13,6 +17,6 @@ export default class Item {
   }
 
   removeDiscount(){
-    this.discount = undefined;
+    this.discount = null;
   }
 }
