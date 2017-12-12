@@ -39,11 +39,11 @@ store.newTransaction();
 //   store.scan(item);
 // });
 
-var cart2 = ["C", "C", "C", "C", "C", "C", "C", "C", "C", "C", "C", "C", "C", "C"];
-
-cart2.forEach(item => {
-  store.scan(item);
-});
+// var cart2 = ["C", "C", "C", "C", "C", "C", "C", "C", "C", "C", "C", "C", "C", "C"];
+//
+// cart2.forEach(item => {
+//   store.scan(item);
+// });
 
 // var cart2 = ["A", "B", "C", "D"];
 //
