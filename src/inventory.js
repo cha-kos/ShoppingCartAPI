@@ -1,12 +1,16 @@
-import Item from "item";
+import Item from "./item";
 
 export default class Inventory {
   constructor(items){
+    if (!items) {
+      items = {};
+    }
     this.items = items;
   }
 
   addItem(item) {
-    this.items[item.name] = new Item(item);
+    var newItem = new Item(item);
+    this.items[newItem.name] = newItem;
   }
 
   updateItem(updatedItem) {
