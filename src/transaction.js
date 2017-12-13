@@ -11,19 +11,23 @@ export default class Transaction{
 
     scanItem(itemID, quantity = 1){
       var currentItem = store.inventory.items[itemID];
+      var currentItemCount = this.cart[itemID] ? this.cart[itemID] : 0;
 
-      if (currentItem.quantity >= quantity && this.cart[itemID]){
+      if (currentItem.quantity >= quantity + currentItemCount && this.cart[itemID]){
         this.cart[itemID] += quantity;
-      } else if (currentItem.quantity >= quantity) {
+      } else if (currentItem.quantity >= quantity + currentItemCount) {
         this.cart[itemID] = quantity;
+      } else{
+        console.log( `Sorry, item ${currentItem.name} is currently out of stock.` );
+        return;
       }
 
-      // if (currentItem.discount && this.cart[itemID] % currentItem.discount.quantity === 0){
-      //   this.discounts += currentItem.discount.amount;
-      // }
-
-      if (currentItem.discount && Math.floor(this.cart[itemID] / currentItem.discount.quantity) !== this.discounts[itemID]){
-        this.discounts[itemID] = Math.floor(this.cart[itemID] / currentItem.discount.quantity);
+      if (currentItem.discount){
+        var discountQuantity = Math.floor(this.cart[itemID] / currentItem.discount.quantity);
+        if (discountQuantity > 0 && discountQuantity !== this.discounts[itemID]){
+          this.discounts[itemID] = Math.floor(this.cart[itemID] / currentItem.discount.quantity);
+          this.updateTotalDiscounts();
+        }
       }
 
       this.subTotal += currentItem.price * quantity;
@@ -32,7 +36,6 @@ export default class Transaction{
     }
 
     calculateTotal(){
-      this.updateTotalDiscounts();
       this.total = this.subTotal - this.totalDiscounts;
     }
 
