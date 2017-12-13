@@ -35,6 +35,10 @@ export default class Transaction{
       this.calculateTotal();
     }
 
+    removeItem(itemID, quantity = 1){
+      this.cart[itemID] -= quantity;
+    }
+
     calculateTotal(){
       this.total = this.subTotal - this.totalDiscounts;
     }

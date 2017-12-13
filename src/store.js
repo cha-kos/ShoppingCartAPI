@@ -20,7 +20,10 @@ class Store {
     return this.currentTransaction.cart;
   }
 
-  removeItem()
+  removeItem(item, quantity){
+    this.currentTransaction.scanItem(item, quantity);
+    return this.currentTransaction.cart;
+  }
 
   total(){
     return this.currentTransaction.total;
@@ -39,6 +42,7 @@ class Store {
     return "Transaction Closed";
   }
 }
+
 
 
 window.store = new Store();
