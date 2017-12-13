@@ -1,8 +1,8 @@
 // webpack.config.js
-var path = require('path');
+let path = require('path');
 
 module.exports = {
-  entry: './src/store.js',
+  entry: './src/test.js',
   output: {
     filename: './bundle.js',
   },
