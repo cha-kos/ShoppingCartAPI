@@ -1,11 +1,11 @@
 export default class Transaction{
 
     constructor(store){
-      // this.store = store;
+      this.store = store;
       this.cart = {};
       this.subTotal = 0;
       this.discounts = {};
-      this.totalDiscounts = 0;
+      this.discountAmount = 0;
       this.total = 0;
     }
 
@@ -23,11 +23,12 @@ export default class Transaction{
         return;
       }
 
+      // add discounts to inventory, add discount logic to dicounts
       if (currentItem.discount){
         let discountQuantity = Math.floor(this.cart[itemID] / currentItem.discount.quantity);
         if (discountQuantity > 0 && discountQuantity !== this.discounts[itemID]){
           this.discounts[itemID] = Math.floor(this.cart[itemID] / currentItem.discount.quantity);
-          this.updateTotalDiscounts(currentItem);
+          this._updateDiscountAmount(currentItem);
         }
       }
 
@@ -41,13 +42,13 @@ export default class Transaction{
     }
 
     calculateTotal(){
-      this.total = this.subTotal - this.totalDiscounts;
+      this.total = this.subTotal - this.discountAmount;
     }
 
-    updateTotalDiscounts(currentItem){
-      this.totalDiscounts = 0;
+    _updateDiscountAmount(currentItem){
+      this.discountAmount = 0;
       for (let item in this.discounts){
-        this.totalDiscounts += this.discounts[item] * currentItem.discount.amount;
+        this.discountAmount += this.discounts[item] * currentItem.discount.amount;
       }
     }
 
@@ -57,3 +58,6 @@ export default class Transaction{
     //   }
     // }
 }
+
+
+// have a "calculate discount" that is invoked once, on store.closeTransaction

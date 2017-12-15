@@ -6,6 +6,7 @@ export default class Inventory {
       items = {};
     }
     this.items = items;
+    this.discounts = discounts;
   }
 
   addItem(item) {
@@ -33,5 +34,6 @@ export default class Inventory {
     this.items[itemName].quantity = amount;
   }
 
-
 }
+
+// add default parameters, edge cases for invalid quantities / itmes etc.
