@@ -78,7 +78,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 (0, _test2.default)();
 
-console.log("entry");
+// console.log("entry");
 
 /***/ }),
 /* 1 */
@@ -254,8 +254,8 @@ var Transaction = function () {
     this.store = store;
     this.cart = {};
     this.subTotal = 0;
-    this.discounts = {};
-    this.discountAmount = 0;
+    this.discountQuantities = {};
+    this.discountTotal = 0;
     this.total = 0;
   }
 
@@ -264,7 +264,6 @@ var Transaction = function () {
     value: function scanItem(currentItem) {
       var quantity = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 1;
 
-      // const currentItem = store.inventory.items[itemID];
       var itemID = currentItem.name;
       var currentItemCount = this.cart[itemID] ? this.cart[itemID] : 0;
 
@@ -278,8 +277,13 @@ var Transaction = function () {
       }
 
       // add discounts to inventory, add discount logic to dicounts
-      if (store.inventory.discounts[itemID]) {
-        store.inventory.discounts.updateDiscountQuantity(itemID, this.discounts[itemID], this.cart[itemId]);
+      var currentItemDiscount = store.inventory.discounts[itemID];
+      if (currentItemDiscount) {
+        var updatedItemDiscount = this.store.inventory.itemDiscounts.calculateItemDiscount(currentItemDiscount, currentItemCount, this.discountQuantities[itemID]);
+
+        this.discountQuantities[itemID] = updatedItemDiscount.quantity;
+        this.discountTotal += updatedItemDiscount.amount;
+
         // let discountQuantity = Math.floor(this.cart[itemID] / currentItem.discount.quantity);
         // if (discountQuantity > 0 && discountQuantity !== this.discounts[itemID]){
         //   this.discounts[itemID] = Math.floor(this.cart[itemID] / currentItem.discount.quantity);
@@ -297,20 +301,26 @@ var Transaction = function () {
       var quantity = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 1;
 
       this.cart[itemID] -= quantity;
+      var currentItemDiscount = store.inventory.discounts[itemID];
+      if (currentItemDiscount) {
+        var updatedItemDiscount = this.store.inventory.itemDiscounts.calculateItemDiscount(currentItemDiscount, this.cart[itemID], this.discountQuantities[itemID]);
+
+        this.discountQuantities[itemID] = updatedItemDiscount.quantity;
+        this.discountTotal -= updatedItemDiscount.amount;
+      }
     }
   }, {
     key: "calculateTotal",
     value: function calculateTotal() {
-      this.total = this.subTotal - this.discountAmount;
+      this.total = this.subTotal - this.discountTotal;
     }
-  }, {
-    key: "_updateDiscountAmount",
-    value: function _updateDiscountAmount(currentItem) {
-      this.discountAmount = 0;
-      for (var item in this.discounts) {
-        this.discountAmount += this.discounts[item] * currentItem.discount.amount;
-      }
-    }
+
+    // _updateDiscountAmount(currentItem){
+    //   this.discountAmount = 0;
+    //   for (let item in this.discounts){
+    //     this.discountAmount += this.discounts[item] * currentItem.discount.amount;
+    //   }
+    // }
 
     // purchase(){
     //   for (let item in this.cart) {
@@ -491,18 +501,34 @@ var Discounts = function () {
   function Discounts(amount, quantity) {
     _classCallCheck(this, Discounts);
 
-    this.quantity = discount.quantity;
-    this.amount = discount.amount;
+    this.quantity = quantity;
+    this.amount = amount;
   }
 
   _createClass(Discounts, [{
-    key: "calculateDiscountQuantity",
-    value: function calculateDiscountQuantity(itemID, itemQuantity, currentDiscountQuantity) {
-      var newDiscountQuantity = Math.floor(this.cart[itemID] / currentItem.discount.quantity);
+    key: "calculateItemDiscount",
+    value: function calculateItemDiscount(discount, itemQuantity, currentDiscountQuantity) {
+      var discountQuantity = this._calculateQuantity(discount, itemQuantity, currentDiscountQuantity);
+      var discountAmount = this._calculateAmount(discount.amount, discountQuantity);
+
+      return {
+        quantity: discountQuantity,
+        amount: discountAmount
+      };
+    }
+  }, {
+    key: "_calculateQuantity",
+    value: function _calculateQuantity(discount, itemQuantity, currentDiscountQuantity) {
+      var newDiscountQuantity = Math.floor(itemQuantity / discount.quantity);
       if (newDiscountQuantity !== currentDiscountQuantity) {
         return newDiscountQuantity;
       }
       return newDiscountQuantity;
+    }
+  }, {
+    key: "_calculateAmount",
+    value: function _calculateAmount(amount, discountQuantity) {
+      return amount * discountQuantity;
     }
   }]);
 
