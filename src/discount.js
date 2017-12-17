@@ -4,12 +4,13 @@ export default class Discounts {
     this.amount = amount;
   }
 
-  calculateItemDiscount(discount, itemQuantity, currentDiscountQuantity){
-    let discountQuantity = this._calculateQuantity(discount, itemQuantity, currentDiscountQuantity);
-    let discountAmount = this._calculateAmount(discount.amount, discountQuantity);
+  calculateItemDiscount(discount, itemQuantity, currentDiscountQuantity = 0){
+    let newDiscountQuantity = this._calculateQuantity(discount, itemQuantity, currentDiscountQuantity);
+    let discountDifference = Math.abs(newDiscountQuantity - currentDiscountQuantity);
+    let discountAmount = this._calculateAmount(discount.amount, discountDifference);
 
     return {
-      quantity: discountQuantity,
+      quantity: newDiscountQuantity,
       amount: discountAmount
     };
   }

@@ -15,17 +15,14 @@ export default class Store {
     this.currentTransaction = new Transaction(this);
   }
 
-  scan(itemID, quantity){
-    const currentItem = this.inventory.items[itemID];
-    if (!currentItem){
-      return "That item does not exist in our inventory";
-    }
-    this.currentTransaction.scanItem(currentItem, quantity);
+  scan(itemName, quantity){
+    this.currentTransaction.scanItem(itemName, quantity);
     return this.currentTransaction.cart;
   }
 
-  removeItem(itemID, quantity){
-    this.currentTransaction.removeItem(itemID, quantity);
+  removeItem(itemName, quantity){
+    // const currentItem = this.inventory.items[itemName];
+    this.currentTransaction.removeItem(itemName, quantity);
     return this.currentTransaction.cart;
   }
 
@@ -46,6 +43,8 @@ export default class Store {
     this.currentTransaction = null;
     return "Transaction Closed";
   }
+
+
 }
 
 // calc discounts on close transaction

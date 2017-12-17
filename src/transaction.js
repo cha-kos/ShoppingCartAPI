@@ -9,71 +9,63 @@ export default class Transaction{
       this.total = 0;
     }
 
-    scanItem(currentItem, quantity = 1){
-      let itemID = currentItem.name;
-      let currentItemCount = this.cart[itemID] ? this.cart[itemID] : 0;
+    scanItem(itemName, quantity = 1){
+      let currentItem = this.store.inventory.items[itemName];
+      let currentItemCount = this.cart[itemName] ? this.cart[itemName] : 0;
 
-      if (currentItem.quantity >= quantity + currentItemCount && this.cart[itemID]){
-        this.cart[itemID] += quantity;
+      if (currentItem.quantity >= quantity + currentItemCount && this.cart[itemName]){
+        this.cart[itemName] += quantity;
       } else if (currentItem.quantity >= quantity + currentItemCount) {
-        this.cart[itemID] = quantity;
+        this.cart[itemName] = quantity;
       } else{
-        console.log( `Sorry, item ${currentItem.name} is currently out of stock.` );
+        console.log( `Sorry, not enought inventory of ${currentItem.name}` );
         return;
       }
 
-      // add discounts to inventory, add discount logic to dicounts
-      let currentItemDiscount = store.inventory.discounts[itemID];
-      if (currentItemDiscount){
-        let updatedItemDiscount =
-        this.store.inventory.itemDiscounts
-        .calculateItemDiscount(currentItemDiscount, currentItemCount, this.discountQuantities[itemID]);
-
-        this.discountQuantities[itemID] = updatedItemDiscount.quantity;
-        this.discountTotal += updatedItemDiscount.amount;
-
-
-        // let discountQuantity = Math.floor(this.cart[itemID] / currentItem.discount.quantity);
-        // if (discountQuantity > 0 && discountQuantity !== this.discounts[itemID]){
-        //   this.discounts[itemID] = Math.floor(this.cart[itemID] / currentItem.discount.quantity);
-        //   this._updateDiscountAmount(currentItem);
-        // }
+      if (this.store.inventory.itemDiscounts[itemName]){
+        this._updateDiscountAmount(itemName, "add");
       }
-
       this.subTotal += currentItem.price * quantity;
-
-      this.calculateTotal();
+      this._calculateTotal();
     }
 
-    removeItem(itemID, quantity = 1){
-      this.cart[itemID] -= quantity;
-      let currentItemDiscount = store.inventory.discounts[itemID];
-      if (currentItemDiscount){
-        let updatedItemDiscount =
-        this.store.inventory.itemDiscounts
-        .calculateItemDiscount(currentItemDiscount, this.cart[itemID], this.discountQuantities[itemID]);
-
-        this.discountQuantities[itemID] = updatedItemDiscount.quantity;
-        this.discountTotal -= updatedItemDiscount.amount;
+    removeItem(itemName, quantity = 1){
+      let currentItem = this.store.inventory.items[itemName];
+      this.cart[itemName] -= quantity;
+      if (this.store.inventory.itemDiscounts[itemName]){
+        this._updateDiscountAmount(itemName, "remove");
       }
+      this.subTotal -= currentItem.price * quantity;
+      this._calculateTotal();
     }
 
-    calculateTotal(){
+    _calculateTotal(){
       this.total = this.subTotal - this.discountTotal;
     }
 
-    // _updateDiscountAmount(currentItem){
-    //   this.discountAmount = 0;
-    //   for (let item in this.discounts){
-    //     this.discountAmount += this.discounts[item] * currentItem.discount.amount;
-    //   }
-    // }
+    _updateDiscountAmount(itemName, command){
+        let updatedItemDiscount = this._calculateItemDiscount(itemName);
+        this.discountQuantities[itemName] = updatedItemDiscount.quantity;
+        if (command === "add"){
+          this._addDiscount(updatedItemDiscount.amount);
+        } else if (command === "remove") {
+          this._removeDiscount(updatedItemDiscount.amount);
+        }
+    }
 
-    // purchase(){
-    //   for (let item in this.cart) {
-    //     store.inventory.items[item].quantity -= this.cart[item];
-    //   }
-    // }
+    _calculateItemDiscount(itemName){
+      let discount = this.store.inventory.itemDiscounts[itemName];
+      return discount.calculateItemDiscount(discount, this.cart[itemName], this.discountQuantities[itemName]);
+    }
+
+    _addDiscount(amount){
+      this.discountTotal += amount;
+    }
+
+    _removeDiscount(amount){
+      this.discountTotal -= amount;
+    }
+
 }
 
 

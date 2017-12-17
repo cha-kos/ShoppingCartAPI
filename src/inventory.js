@@ -1,4 +1,5 @@
 import Item from "./item";
+import Discount from "./discount";
 
 export default class Inventory {
   constructor(items){

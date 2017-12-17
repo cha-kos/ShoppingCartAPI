@@ -60,7 +60,7 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 0);
+/******/ 	return __webpack_require__(__webpack_require__.s = 1);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -70,15 +70,59 @@
 "use strict";
 
 
-var _test = __webpack_require__(1);
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
 
-var _test2 = _interopRequireDefault(_test);
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-(0, _test2.default)();
+var Discounts = function () {
+  function Discounts(amount, quantity) {
+    _classCallCheck(this, Discounts);
 
-// console.log("entry");
+    this.quantity = quantity;
+    this.amount = amount;
+  }
+
+  _createClass(Discounts, [{
+    key: "calculateItemDiscount",
+    value: function calculateItemDiscount(discount, itemQuantity) {
+      var currentDiscountQuantity = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 0;
+
+      var newDiscountQuantity = this._calculateQuantity(discount, itemQuantity, currentDiscountQuantity);
+      var discountDifference = Math.abs(newDiscountQuantity - currentDiscountQuantity);
+      var discountAmount = this._calculateAmount(discount.amount, discountDifference);
+
+      return {
+        quantity: newDiscountQuantity,
+        amount: discountAmount
+      };
+    }
+  }, {
+    key: "_calculateQuantity",
+    value: function _calculateQuantity(discount, itemQuantity, currentDiscountQuantity) {
+      var newDiscountQuantity = Math.floor(itemQuantity / discount.quantity);
+      if (newDiscountQuantity !== currentDiscountQuantity) {
+        return newDiscountQuantity;
+      }
+      return newDiscountQuantity;
+    }
+  }, {
+    key: "_calculateAmount",
+    value: function _calculateAmount(amount, discountQuantity) {
+      return amount * discountQuantity;
+    }
+  }]);
+
+  return Discounts;
+}();
+
+// this.percent = discount.percent;
+
+
+exports.default = Discounts;
 
 /***/ }),
 /* 1 */
@@ -87,60 +131,15 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 "use strict";
 
 
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
+var _test = __webpack_require__(2);
 
-var _store = __webpack_require__(2);
-
-var _store2 = _interopRequireDefault(_store);
+var _test2 = _interopRequireDefault(_test);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-// on the right track, maybe add more stuff
-// add expectation messages, success messages, failure messages
+(0, _test2.default)();
 
-
-var runTests = function runTests() {
-  // make runTests() func and put in separate file
-  var store = new _store2.default();
-  window.store = store;
-  var itemA = { name: "A", price: 2.00, quantity: 30, discount: { amount: 1.00, quantity: 4 } };
-  var itemB = { name: "B", price: 12.00, quantity: 30 };
-  var itemC = { name: "C", price: 1.25, quantity: 30, discount: { amount: 1.50, quantity: 6 } };
-  var itemD = { name: "D", price: 0.15, quantity: 30 };
-  store.inventory.addItem(itemA);
-  store.inventory.addItem(itemB);
-  store.inventory.addItem(itemC);
-  store.inventory.addItem(itemD);
-  store.newTransaction();
-
-  var cart1 = ["A", "B", "C", "D", "A", "B", "A", "A"];
-
-  cart1.forEach(function (item) {
-    store.scan(item);
-  });
-  console.log("Computes the sum correctly with one insance of discount on item A");
-  console.log(store.total());
-
-  // let cart2 = ["C", "C", "C", "C", "C", "C", "C"];
-  //
-  // cart2.forEach(item => {
-  //   store.scan(item);
-  // });
-  //
-  // let cart3 = ["A", "B", "C", "D"];
-  //
-  // cart3.forEach(item => {
-  //   store.scan(item);
-  // });
-
-
-  // outline what logic it is testing i.e.
-  // add > remove > add
-  // double wholesale discount
-};
-exports.default = runTests;
+// console.log("entry");
 
 /***/ }),
 /* 2 */
@@ -153,13 +152,106 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
+var _store = __webpack_require__(3);
+
+var _store2 = _interopRequireDefault(_store);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+// on the right track, maybe add more stuff
+// add expectation messages, success messages, failure messages
+
+
+var runTests = function runTests() {
+  // make runTests() func and put in separate file
+  var store = new _store2.default();
+  var itemA = { name: "A", price: 2.00, quantity: 30 };
+  var itemB = { name: "B", price: 12.00, quantity: 30 };
+  var itemC = { name: "C", price: 1.25, quantity: 30 };
+  var itemD = { name: "D", price: 0.15, quantity: 30 };
+  store.inventory.addItem(itemA);
+  store.inventory.addItem(itemB);
+  store.inventory.addItem(itemC);
+  store.inventory.addItem(itemD);
+  store.inventory.addItemDiscount(itemA.name, 1, 4);
+  store.inventory.addItemDiscount(itemC.name, 1.5, 6);
+
+  store.newTransaction();
+  console.log("Scans items in arbitrary order, and applies discount on item A");
+  var cart1 = ["A", "B", "C", "D", "A", "B", "A", "A"];
+  cart1.forEach(function (item) {
+    store.scan(item);
+  });
+  console.log(store.total() === 32.4);
+  store.closeTransaction();
+
+  store.newTransaction();
+  console.log("Computes the total with one instance of discount on Item C");
+  var cart2 = ["C", "C", "C", "C", "C", "C", "C"];
+  cart2.forEach(function (item) {
+    store.scan(item);
+  });
+  console.log(store.total() === 7.25);
+
+  console.log("Recomputes total after items have been removed and discount no longer applicable");
+  store.removeItem("C", 2);
+  console.log(store.total() === 6.25);
+  store.closeTransaction();
+  //
+
+  store.newTransaction();
+  console.log("Correctly computes a cart containing one of each item");
+  var cart3 = ["A", "B", "C", "D"];
+  cart3.forEach(function (item) {
+    store.scan(item);
+  });
+  console.log(store.total() === 15.40);
+
+  console.log("Scans multiple of the same item at once");
+  store.scan("A", 7);
+  console.log(store.currentTransaction.cart.A === 8);
+
+  console.log("Applies multiple instances of quantity discount");
+  console.log(store.currentTransaction.discountQuantities.A === 2 && store.currentTransaction.discountTotal === 2);
+
+  console.log("Applies quantity discount for multiple items");
+  store.scan("C", 5);
+  console.log(store.currentTransaction.discountTotal === 3.5);
+
+  console.log("Correctly closes a transaction");
+  var transaction = store.currentTransaction;
+  store.closeTransaction();
+  console.log(store.currentTransaction === null);
+
+  console.log("Saves a transaction to the Transaction History");
+  console.log(store.transactionHistory[store.transactionHistory.length - 1] === transaction);
+
+  console.log("Correctly tracks inventory");
+
+  // outline what logic it is testing i.e.
+  // add > remove > add
+  // double wholesale discount
+};
+exports.default = runTests;
+
+/***/ }),
+/* 3 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _transaction = __webpack_require__(3);
+var _transaction = __webpack_require__(4);
 
 var _transaction2 = _interopRequireDefault(_transaction);
 
-var _inventory = __webpack_require__(4);
+var _inventory = __webpack_require__(5);
 
 var _inventory2 = _interopRequireDefault(_inventory);
 
@@ -186,18 +278,15 @@ var Store = function () {
     }
   }, {
     key: "scan",
-    value: function scan(itemID, quantity) {
-      var currentItem = this.inventory.items[itemID];
-      if (!currentItem) {
-        return "That item does not exist in our inventory";
-      }
-      this.currentTransaction.scanItem(currentItem, quantity);
+    value: function scan(itemName, quantity) {
+      this.currentTransaction.scanItem(itemName, quantity);
       return this.currentTransaction.cart;
     }
   }, {
     key: "removeItem",
-    value: function removeItem(itemID, quantity) {
-      this.currentTransaction.removeItem(itemID, quantity);
+    value: function removeItem(itemName, quantity) {
+      // const currentItem = this.inventory.items[itemName];
+      this.currentTransaction.removeItem(itemName, quantity);
       return this.currentTransaction.cart;
     }
   }, {
@@ -233,7 +322,7 @@ var Store = function () {
 exports.default = Store;
 
 /***/ }),
-/* 3 */
+/* 4 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -261,73 +350,72 @@ var Transaction = function () {
 
   _createClass(Transaction, [{
     key: "scanItem",
-    value: function scanItem(currentItem) {
+    value: function scanItem(itemName) {
       var quantity = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 1;
 
-      var itemID = currentItem.name;
-      var currentItemCount = this.cart[itemID] ? this.cart[itemID] : 0;
+      var currentItem = this.store.inventory.items[itemName];
+      var currentItemCount = this.cart[itemName] ? this.cart[itemName] : 0;
 
-      if (currentItem.quantity >= quantity + currentItemCount && this.cart[itemID]) {
-        this.cart[itemID] += quantity;
+      if (currentItem.quantity >= quantity + currentItemCount && this.cart[itemName]) {
+        this.cart[itemName] += quantity;
       } else if (currentItem.quantity >= quantity + currentItemCount) {
-        this.cart[itemID] = quantity;
+        this.cart[itemName] = quantity;
       } else {
-        console.log("Sorry, item " + currentItem.name + " is currently out of stock.");
+        console.log("Sorry, not enought inventory of " + currentItem.name);
         return;
       }
 
-      // add discounts to inventory, add discount logic to dicounts
-      var currentItemDiscount = store.inventory.discounts[itemID];
-      if (currentItemDiscount) {
-        var updatedItemDiscount = this.store.inventory.itemDiscounts.calculateItemDiscount(currentItemDiscount, currentItemCount, this.discountQuantities[itemID]);
-
-        this.discountQuantities[itemID] = updatedItemDiscount.quantity;
-        this.discountTotal += updatedItemDiscount.amount;
-
-        // let discountQuantity = Math.floor(this.cart[itemID] / currentItem.discount.quantity);
-        // if (discountQuantity > 0 && discountQuantity !== this.discounts[itemID]){
-        //   this.discounts[itemID] = Math.floor(this.cart[itemID] / currentItem.discount.quantity);
-        //   this._updateDiscountAmount(currentItem);
-        // }
+      if (this.store.inventory.itemDiscounts[itemName]) {
+        this._updateDiscountAmount(itemName, "add");
       }
-
       this.subTotal += currentItem.price * quantity;
-
-      this.calculateTotal();
+      this._calculateTotal();
     }
   }, {
     key: "removeItem",
-    value: function removeItem(itemID) {
+    value: function removeItem(itemName) {
       var quantity = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 1;
 
-      this.cart[itemID] -= quantity;
-      var currentItemDiscount = store.inventory.discounts[itemID];
-      if (currentItemDiscount) {
-        var updatedItemDiscount = this.store.inventory.itemDiscounts.calculateItemDiscount(currentItemDiscount, this.cart[itemID], this.discountQuantities[itemID]);
-
-        this.discountQuantities[itemID] = updatedItemDiscount.quantity;
-        this.discountTotal -= updatedItemDiscount.amount;
+      var currentItem = this.store.inventory.items[itemName];
+      this.cart[itemName] -= quantity;
+      if (this.store.inventory.itemDiscounts[itemName]) {
+        this._updateDiscountAmount(itemName, "remove");
+      }
+      this.subTotal -= currentItem.price * quantity;
+      this._calculateTotal();
+    }
+  }, {
+    key: "_calculateTotal",
+    value: function _calculateTotal() {
+      this.total = this.subTotal - this.discountTotal;
+    }
+  }, {
+    key: "_updateDiscountAmount",
+    value: function _updateDiscountAmount(itemName, command) {
+      var updatedItemDiscount = this._calculateItemDiscount(itemName);
+      this.discountQuantities[itemName] = updatedItemDiscount.quantity;
+      if (command === "add") {
+        this._addDiscount(updatedItemDiscount.amount);
+      } else if (command === "remove") {
+        this._removeDiscount(updatedItemDiscount.amount);
       }
     }
   }, {
-    key: "calculateTotal",
-    value: function calculateTotal() {
-      this.total = this.subTotal - this.discountTotal;
+    key: "_calculateItemDiscount",
+    value: function _calculateItemDiscount(itemName) {
+      var discount = this.store.inventory.itemDiscounts[itemName];
+      return discount.calculateItemDiscount(discount, this.cart[itemName], this.discountQuantities[itemName]);
     }
-
-    // _updateDiscountAmount(currentItem){
-    //   this.discountAmount = 0;
-    //   for (let item in this.discounts){
-    //     this.discountAmount += this.discounts[item] * currentItem.discount.amount;
-    //   }
-    // }
-
-    // purchase(){
-    //   for (let item in this.cart) {
-    //     store.inventory.items[item].quantity -= this.cart[item];
-    //   }
-    // }
-
+  }, {
+    key: "_addDiscount",
+    value: function _addDiscount(amount) {
+      this.discountTotal += amount;
+    }
+  }, {
+    key: "_removeDiscount",
+    value: function _removeDiscount(amount) {
+      this.discountTotal -= amount;
+    }
   }]);
 
   return Transaction;
@@ -339,7 +427,7 @@ var Transaction = function () {
 exports.default = Transaction;
 
 /***/ }),
-/* 4 */
+/* 5 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -351,9 +439,13 @@ Object.defineProperty(exports, "__esModule", {
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _item = __webpack_require__(5);
+var _item = __webpack_require__(6);
 
 var _item2 = _interopRequireDefault(_item);
+
+var _discount = __webpack_require__(0);
+
+var _discount2 = _interopRequireDefault(_discount);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -406,7 +498,7 @@ var Inventory = function () {
     value: function addItemDiscount(itemName, amount) {
       var quantity = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 1;
 
-      this.itemDiscounts[itemName] = new Discount(amount, quantity);
+      this.itemDiscounts[itemName] = new _discount2.default(amount, quantity);
     }
   }, {
     key: "removeItemDiscount",
@@ -418,7 +510,7 @@ var Inventory = function () {
     value: function updateItemDiscount(itemName, amount) {
       var quantity = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 1;
 
-      this.itemDiscounts[itemName] = new Discount(amount, quantity);
+      this.itemDiscounts[itemName] = new _discount2.default(amount, quantity);
     }
   }]);
 
@@ -431,58 +523,6 @@ var Inventory = function () {
 exports.default = Inventory;
 
 /***/ }),
-/* 5 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-var _discount = __webpack_require__(6);
-
-var _discount2 = _interopRequireDefault(_discount);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-var Item = function () {
-  function Item(item) {
-    _classCallCheck(this, Item);
-
-    this.name = item.name;
-    this.price = item.price;
-    this.quantity = item.quantity;
-    // if (item.discount){
-    //   this.discount = new Discount(item.discount);
-    // } else {
-    //   this.discount = null;
-    // }
-  }
-
-  _createClass(Item, [{
-    key: "addDiscount",
-    value: function addDiscount(discount) {
-      this.discount = new _discount2.default(discount);
-    }
-  }, {
-    key: "removeDiscount",
-    value: function removeDiscount() {
-      this.discount = null;
-    }
-  }]);
-
-  return Item;
-}();
-
-exports.default = Item;
-
-/***/ }),
 /* 6 */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -493,52 +533,23 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+var _discount = __webpack_require__(0);
+
+var _discount2 = _interopRequireDefault(_discount);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-var Discounts = function () {
-  function Discounts(amount, quantity) {
-    _classCallCheck(this, Discounts);
+var Item = function Item(item) {
+  _classCallCheck(this, Item);
 
-    this.quantity = quantity;
-    this.amount = amount;
-  }
+  this.name = item.name;
+  this.price = item.price;
+  this.quantity = item.quantity;
+};
 
-  _createClass(Discounts, [{
-    key: "calculateItemDiscount",
-    value: function calculateItemDiscount(discount, itemQuantity, currentDiscountQuantity) {
-      var discountQuantity = this._calculateQuantity(discount, itemQuantity, currentDiscountQuantity);
-      var discountAmount = this._calculateAmount(discount.amount, discountQuantity);
-
-      return {
-        quantity: discountQuantity,
-        amount: discountAmount
-      };
-    }
-  }, {
-    key: "_calculateQuantity",
-    value: function _calculateQuantity(discount, itemQuantity, currentDiscountQuantity) {
-      var newDiscountQuantity = Math.floor(itemQuantity / discount.quantity);
-      if (newDiscountQuantity !== currentDiscountQuantity) {
-        return newDiscountQuantity;
-      }
-      return newDiscountQuantity;
-    }
-  }, {
-    key: "_calculateAmount",
-    value: function _calculateAmount(amount, discountQuantity) {
-      return amount * discountQuantity;
-    }
-  }]);
-
-  return Discounts;
-}();
-
-// this.percent = discount.percent;
-
-
-exports.default = Discounts;
+exports.default = Item;
 
 /***/ })
 /******/ ]);
