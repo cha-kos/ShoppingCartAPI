@@ -6,7 +6,7 @@ export default class Inventory {
       items = {};
     }
     this.items = items;
-    // this.discounts = discounts;
+    this.itemDiscounts = {};
   }
 
   addItem(item) {
@@ -15,7 +15,7 @@ export default class Inventory {
   }
 
   updateItem(updatedItem) {
-    this.items[updatedItem.name] = Object.assign({}, this.items[updatedItem.name], updateItem);
+    this.items[updatedItem.name] = Object.assign({}, this.items[updatedItem.name], updatedItem);
   }
 
   removeItem(item){
@@ -34,6 +34,17 @@ export default class Inventory {
     this.items[itemName].quantity = amount;
   }
 
+  addItemDiscount(itemName, amount, quantity = 1){
+    this.itemDiscounts[itemName] = new Discount(amount, quantity);
+  }
+
+  removeItemDiscount(itemName){
+    delete this.discountItems[itemName];
+  }
+
+  updateItemDiscount(itemName, amount, quantity = 1){
+    this.itemDiscounts[itemName] = new Discount(amount, quantity);
+  }
 }
 
 // add default parameters, edge cases for invalid quantities / itmes etc.

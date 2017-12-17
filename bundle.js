@@ -356,7 +356,7 @@ var Inventory = function () {
       items = {};
     }
     this.items = items;
-    // this.discounts = discounts;
+    this.itemDiscounts = {};
   }
 
   _createClass(Inventory, [{
@@ -367,19 +367,9 @@ var Inventory = function () {
     }
   }, {
     key: "updateItem",
-    value: function (_updateItem) {
-      function updateItem(_x) {
-        return _updateItem.apply(this, arguments);
-      }
-
-      updateItem.toString = function () {
-        return _updateItem.toString();
-      };
-
-      return updateItem;
-    }(function (updatedItem) {
-      this.items[updatedItem.name] = Object.assign({}, this.items[updatedItem.name], updateItem);
-    })
+    value: function updateItem(updatedItem) {
+      this.items[updatedItem.name] = Object.assign({}, this.items[updatedItem.name], updatedItem);
+    }
   }, {
     key: "removeItem",
     value: function removeItem(item) {
@@ -399,6 +389,25 @@ var Inventory = function () {
     key: "updateItemQuantity",
     value: function updateItemQuantity(itemName, amount) {
       this.items[itemName].quantity = amount;
+    }
+  }, {
+    key: "addItemDiscount",
+    value: function addItemDiscount(itemName, amount) {
+      var quantity = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 1;
+
+      this.itemDiscounts[itemName] = new Discount(amount, quantity);
+    }
+  }, {
+    key: "removeItemDiscount",
+    value: function removeItemDiscount(itemName) {
+      delete this.discountItems[itemName];
+    }
+  }, {
+    key: "updateItemDiscount",
+    value: function updateItemDiscount(itemName, amount) {
+      var quantity = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 1;
+
+      this.itemDiscounts[itemName] = new Discount(amount, quantity);
     }
   }]);
 
@@ -475,12 +484,11 @@ Object.defineProperty(exports, "__esModule", {
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-var Discounts = function Discounts() {
-  var discounts = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
-
+var Discounts = function Discounts(amount, quantity) {
   _classCallCheck(this, Discounts);
 
-  this.discounts = discounts;
+  this.quantity = discount.quantity;
+  this.amount = discount.amount;
 };
 
 // this.percent = discount.percent;

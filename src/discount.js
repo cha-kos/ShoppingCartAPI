@@ -1,6 +1,7 @@
 export default class Discounts {
-  constructor(discounts = {}){
-    this.discounts = discounts;
+  constructor(amount, quantity){
+    this.quantity = discount.quantity;
+    this.amount = discount.amount;
   }
 }
 
