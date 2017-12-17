@@ -278,12 +278,13 @@ var Transaction = function () {
       }
 
       // add discounts to inventory, add discount logic to dicounts
-      if (currentItem.discount) {
-        var discountQuantity = Math.floor(this.cart[itemID] / currentItem.discount.quantity);
-        if (discountQuantity > 0 && discountQuantity !== this.discounts[itemID]) {
-          this.discounts[itemID] = Math.floor(this.cart[itemID] / currentItem.discount.quantity);
-          this._updateDiscountAmount(currentItem);
-        }
+      if (store.inventory.discounts[itemID]) {
+        store.inventory.discounts.updateDiscountQuantity(itemID, this.discounts[itemID], this.cart[itemId]);
+        // let discountQuantity = Math.floor(this.cart[itemID] / currentItem.discount.quantity);
+        // if (discountQuantity > 0 && discountQuantity !== this.discounts[itemID]){
+        //   this.discounts[itemID] = Math.floor(this.cart[itemID] / currentItem.discount.quantity);
+        //   this._updateDiscountAmount(currentItem);
+        // }
       }
 
       this.subTotal += currentItem.price * quantity;
@@ -447,11 +448,11 @@ var Item = function () {
     this.name = item.name;
     this.price = item.price;
     this.quantity = item.quantity;
-    if (item.discount) {
-      this.discount = new _discount2.default(item.discount);
-    } else {
-      this.discount = null;
-    }
+    // if (item.discount){
+    //   this.discount = new Discount(item.discount);
+    // } else {
+    //   this.discount = null;
+    // }
   }
 
   _createClass(Item, [{
@@ -482,14 +483,31 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-var Discounts = function Discounts(amount, quantity) {
-  _classCallCheck(this, Discounts);
+var Discounts = function () {
+  function Discounts(amount, quantity) {
+    _classCallCheck(this, Discounts);
 
-  this.quantity = discount.quantity;
-  this.amount = discount.amount;
-};
+    this.quantity = discount.quantity;
+    this.amount = discount.amount;
+  }
+
+  _createClass(Discounts, [{
+    key: "calculateDiscountQuantity",
+    value: function calculateDiscountQuantity(itemID, itemQuantity, currentDiscountQuantity) {
+      var newDiscountQuantity = Math.floor(this.cart[itemID] / currentItem.discount.quantity);
+      if (newDiscountQuantity !== currentDiscountQuantity) {
+        return newDiscountQuantity;
+      }
+      return newDiscountQuantity;
+    }
+  }]);
+
+  return Discounts;
+}();
 
 // this.percent = discount.percent;
 

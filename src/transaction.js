@@ -24,12 +24,13 @@ export default class Transaction{
       }
 
       // add discounts to inventory, add discount logic to dicounts
-      if (currentItem.discount){
-        let discountQuantity = Math.floor(this.cart[itemID] / currentItem.discount.quantity);
-        if (discountQuantity > 0 && discountQuantity !== this.discounts[itemID]){
-          this.discounts[itemID] = Math.floor(this.cart[itemID] / currentItem.discount.quantity);
-          this._updateDiscountAmount(currentItem);
-        }
+      if (store.inventory.discounts[itemID]){
+        store.inventory.discounts.updateDiscountQuantity(itemID, this.discounts[itemID], this.cart[itemId]);
+        // let discountQuantity = Math.floor(this.cart[itemID] / currentItem.discount.quantity);
+        // if (discountQuantity > 0 && discountQuantity !== this.discounts[itemID]){
+        //   this.discounts[itemID] = Math.floor(this.cart[itemID] / currentItem.discount.quantity);
+        //   this._updateDiscountAmount(currentItem);
+        // }
       }
 
       this.subTotal += currentItem.price * quantity;
