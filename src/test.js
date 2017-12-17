@@ -5,18 +5,17 @@ import Store from "./store";
 
 
 const runTests = () =>{
-    // make runTests() func and put in separate file
   let store = new Store();
-  let itemA = {name: "A", price: 2.00, quantity: 30};
-  let itemB = {name: "B", price: 12.00, quantity: 30};
-  let itemC = {name: "C", price: 1.25, quantity: 30};
-  let itemD = {name: "D", price: 0.15, quantity: 30};
+  let itemA = {name: "A", price: 2.00, quantity: 100};
+  let itemB = {name: "B", price: 12.00, quantity: 100};
+  let itemC = {name: "C", price: 1.25, quantity: 100};
+  let itemD = {name: "D", price: 0.15, quantity: 100};
   store.inventory.addItem(itemA);
   store.inventory.addItem(itemB);
   store.inventory.addItem(itemC);
   store.inventory.addItem(itemD);
-  store.inventory.addItemDiscount(itemA.name, 1, 4);
-  store.inventory.addItemDiscount(itemC.name, 1.5, 6);
+  store.inventory.addItemDiscount("A", 1, 4);
+  store.inventory.addItemDiscount("C", 1.5, 6);
 
   store.newTransaction();
     console.log("Scans items in arbitrary order, and applies discount on item A");
@@ -35,11 +34,10 @@ const runTests = () =>{
       });
       console.log(store.total() === 7.25);
 
-    console.log("Recomputes total after items have been removed and discount no longer applicable");
+    console.log("Removes item(s) and correctly recomputes total, removing discount");
       store.removeItem("C", 2);
       console.log(store.total() === 6.25);
   store.closeTransaction();
-  //
 
   store.newTransaction();
     console.log("Correctly computes a cart containing one of each item");
@@ -70,12 +68,16 @@ const runTests = () =>{
       console.log(store.transactionHistory[store.transactionHistory.length - 1] === transaction);
 
     console.log("Correctly tracks inventory");
-      
+      console.log(store.inventory.items.A.quantity === 88);
 
-
-
-  // outline what logic it is testing i.e.
-  // add > remove > add
-  // double wholesale discount
+    console.log("Successfully cancels a transaction");
+      store.newTransaction();
+      store.cancelTransaction();
+      console.log(store.currentTransaction === null);
 };
 export default runTests;
+
+
+// outline what logic it is testing i.e.
+// add > remove > add
+// double wholesale discount

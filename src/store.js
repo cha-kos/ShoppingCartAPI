@@ -21,7 +21,6 @@ export default class Store {
   }
 
   removeItem(itemName, quantity){
-    // const currentItem = this.inventory.items[itemName];
     this.currentTransaction.removeItem(itemName, quantity);
     return this.currentTransaction.cart;
   }
@@ -43,9 +42,4 @@ export default class Store {
     this.currentTransaction = null;
     return "Transaction Closed";
   }
-
-
 }
-
-// calc discounts on close transaction
-// maybe a print method on close transaction that takes stock of items, total, discount, discounted total

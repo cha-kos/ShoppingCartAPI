@@ -27,5 +27,3 @@ export default class Discounts {
     return amount * discountQuantity;
   }
 }
-
-// this.percent = discount.percent;

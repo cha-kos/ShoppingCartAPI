@@ -65,8 +65,4 @@ export default class Transaction{
     _removeDiscount(amount){
       this.discountTotal -= amount;
     }
-
 }
-
-
-// have a "calculate discount" that is invoked once, on store.closeTransaction

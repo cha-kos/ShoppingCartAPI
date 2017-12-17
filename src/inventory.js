@@ -23,16 +23,18 @@ export default class Inventory {
     delete this.items[item];
   }
 
-  addItemQuantity(itemName, amount){
-    this.items[itemName].quantity += amount;
+  addItemQuantity(itemName, quantity = 1){
+    this.items[itemName].quantity += quantity;
   }
 
-  removeItemQuantity(itemName, amount){
-    this.items[itemName].quantity -= amount;
+  removeItemQuantity(itemName, quantity = 1){
+    this.items[itemName].quantity -= quantity;
   }
 
-  updateItemQuantity(itemName, amount){
-    this.items[itemName].quantity = amount;
+  updateItemQuantity(itemName, quantity){
+    if (quantity) {
+      this.items[itemName].quantity = quantity;
+    }
   }
 
   addItemDiscount(itemName, amount, quantity = 1){
@@ -47,5 +49,3 @@ export default class Inventory {
     this.itemDiscounts[itemName] = new Discount(amount, quantity);
   }
 }
-
-// add default parameters, edge cases for invalid quantities / itmes etc.

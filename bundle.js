@@ -119,9 +119,6 @@ var Discounts = function () {
   return Discounts;
 }();
 
-// this.percent = discount.percent;
-
-
 exports.default = Discounts;
 
 /***/ }),
@@ -138,8 +135,6 @@ var _test2 = _interopRequireDefault(_test);
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 (0, _test2.default)();
-
-// console.log("entry");
 
 /***/ }),
 /* 2 */
@@ -163,18 +158,17 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 
 var runTests = function runTests() {
-  // make runTests() func and put in separate file
   var store = new _store2.default();
-  var itemA = { name: "A", price: 2.00, quantity: 30 };
-  var itemB = { name: "B", price: 12.00, quantity: 30 };
-  var itemC = { name: "C", price: 1.25, quantity: 30 };
-  var itemD = { name: "D", price: 0.15, quantity: 30 };
+  var itemA = { name: "A", price: 2.00, quantity: 100 };
+  var itemB = { name: "B", price: 12.00, quantity: 100 };
+  var itemC = { name: "C", price: 1.25, quantity: 100 };
+  var itemD = { name: "D", price: 0.15, quantity: 100 };
   store.inventory.addItem(itemA);
   store.inventory.addItem(itemB);
   store.inventory.addItem(itemC);
   store.inventory.addItem(itemD);
-  store.inventory.addItemDiscount(itemA.name, 1, 4);
-  store.inventory.addItemDiscount(itemC.name, 1.5, 6);
+  store.inventory.addItemDiscount("A", 1, 4);
+  store.inventory.addItemDiscount("C", 1.5, 6);
 
   store.newTransaction();
   console.log("Scans items in arbitrary order, and applies discount on item A");
@@ -193,11 +187,10 @@ var runTests = function runTests() {
   });
   console.log(store.total() === 7.25);
 
-  console.log("Recomputes total after items have been removed and discount no longer applicable");
+  console.log("Removes item(s) and correctly recomputes total, removing discount");
   store.removeItem("C", 2);
   console.log(store.total() === 6.25);
   store.closeTransaction();
-  //
 
   store.newTransaction();
   console.log("Correctly computes a cart containing one of each item");
@@ -227,12 +220,18 @@ var runTests = function runTests() {
   console.log(store.transactionHistory[store.transactionHistory.length - 1] === transaction);
 
   console.log("Correctly tracks inventory");
+  console.log(store.inventory.items.A.quantity === 88);
 
-  // outline what logic it is testing i.e.
-  // add > remove > add
-  // double wholesale discount
+  console.log("Successfully cancels a transaction");
+  store.newTransaction();
+  store.cancelTransaction();
+  console.log(store.currentTransaction === null);
 };
 exports.default = runTests;
+
+// outline what logic it is testing i.e.
+// add > remove > add
+// double wholesale discount
 
 /***/ }),
 /* 3 */
@@ -285,7 +284,6 @@ var Store = function () {
   }, {
     key: "removeItem",
     value: function removeItem(itemName, quantity) {
-      // const currentItem = this.inventory.items[itemName];
       this.currentTransaction.removeItem(itemName, quantity);
       return this.currentTransaction.cart;
     }
@@ -314,10 +312,6 @@ var Store = function () {
 
   return Store;
 }();
-
-// calc discounts on close transaction
-// maybe a print method on close transaction that takes stock of items, total, discount, discounted total
-
 
 exports.default = Store;
 
@@ -421,9 +415,6 @@ var Transaction = function () {
   return Transaction;
 }();
 
-// have a "calculate discount" that is invoked once, on store.closeTransaction
-
-
 exports.default = Transaction;
 
 /***/ }),
@@ -480,18 +471,24 @@ var Inventory = function () {
     }
   }, {
     key: "addItemQuantity",
-    value: function addItemQuantity(itemName, amount) {
-      this.items[itemName].quantity += amount;
+    value: function addItemQuantity(itemName) {
+      var quantity = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 1;
+
+      this.items[itemName].quantity += quantity;
     }
   }, {
     key: "removeItemQuantity",
-    value: function removeItemQuantity(itemName, amount) {
-      this.items[itemName].quantity -= amount;
+    value: function removeItemQuantity(itemName) {
+      var quantity = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 1;
+
+      this.items[itemName].quantity -= quantity;
     }
   }, {
     key: "updateItemQuantity",
-    value: function updateItemQuantity(itemName, amount) {
-      this.items[itemName].quantity = amount;
+    value: function updateItemQuantity(itemName, quantity) {
+      if (quantity) {
+        this.items[itemName].quantity = quantity;
+      }
     }
   }, {
     key: "addItemDiscount",
@@ -516,9 +513,6 @@ var Inventory = function () {
 
   return Inventory;
 }();
-
-// add default parameters, edge cases for invalid quantities / itmes etc.
-
 
 exports.default = Inventory;
 
