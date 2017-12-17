@@ -6,7 +6,7 @@ export default class Inventory {
       items = {};
     }
     this.items = items;
-    this.discounts = discounts;
+    // this.discounts = discounts;
   }
 
   addItem(item) {

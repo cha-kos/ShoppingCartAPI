@@ -70,52 +70,15 @@
 "use strict";
 
 
-var _store = __webpack_require__(1);
+var _test = __webpack_require__(1);
 
-var _store2 = _interopRequireDefault(_store);
+var _test2 = _interopRequireDefault(_test);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-// on the right track, maybe add more stuff
-// add expectation messages, success messages, failure messages
+(0, _test2.default)();
 
-
-// make runTests() func and put in separate file
-var store = new _store2.default();
-var itemA = { name: "A", price: 2.00, quantity: 30, discount: { amount: 1.00, quantity: 4 } };
-var itemB = { name: "B", price: 12.00, quantity: 30 };
-var itemC = { name: "C", price: 1.25, quantity: 30, discount: { amount: 1.50, quantity: 6 } };
-var itemD = { name: "D", price: 0.15, quantity: 30 };
-store.inventory.addItem(itemA);
-store.inventory.addItem(itemB);
-store.inventory.addItem(itemC);
-store.inventory.addItem(itemD);
-store.newTransaction();
-
-var cart1 = ["A", "B", "C", "D", "A", "B", "A", "A"];
-
-cart1.forEach(function (item) {
-  store.scan(item);
-});
-console.log("Computes the sum correctly with one insance of discount on item A");
-console.log(store.total() === 32.4);
-
-// let cart2 = ["C", "C", "C", "C", "C", "C", "C"];
-//
-// cart2.forEach(item => {
-//   store.scan(item);
-// });
-//
-// let cart3 = ["A", "B", "C", "D"];
-//
-// cart3.forEach(item => {
-//   store.scan(item);
-// });
-
-
-// outline what logic it is testing i.e.
-// add > remove > add
-// double wholesale discount
+console.log("entry");
 
 /***/ }),
 /* 1 */
@@ -128,13 +91,75 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
+var _store = __webpack_require__(2);
+
+var _store2 = _interopRequireDefault(_store);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+// on the right track, maybe add more stuff
+// add expectation messages, success messages, failure messages
+
+
+var runTests = function runTests() {
+  // make runTests() func and put in separate file
+  var store = new _store2.default();
+  window.store = store;
+  var itemA = { name: "A", price: 2.00, quantity: 30, discount: { amount: 1.00, quantity: 4 } };
+  var itemB = { name: "B", price: 12.00, quantity: 30 };
+  var itemC = { name: "C", price: 1.25, quantity: 30, discount: { amount: 1.50, quantity: 6 } };
+  var itemD = { name: "D", price: 0.15, quantity: 30 };
+  store.inventory.addItem(itemA);
+  store.inventory.addItem(itemB);
+  store.inventory.addItem(itemC);
+  store.inventory.addItem(itemD);
+  store.newTransaction();
+
+  var cart1 = ["A", "B", "C", "D", "A", "B", "A", "A"];
+
+  cart1.forEach(function (item) {
+    store.scan(item);
+  });
+  console.log("Computes the sum correctly with one insance of discount on item A");
+  console.log(store.total());
+
+  // let cart2 = ["C", "C", "C", "C", "C", "C", "C"];
+  //
+  // cart2.forEach(item => {
+  //   store.scan(item);
+  // });
+  //
+  // let cart3 = ["A", "B", "C", "D"];
+  //
+  // cart3.forEach(item => {
+  //   store.scan(item);
+  // });
+
+
+  // outline what logic it is testing i.e.
+  // add > remove > add
+  // double wholesale discount
+};
+exports.default = runTests;
+
+/***/ }),
+/* 2 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _transaction = __webpack_require__(2);
+var _transaction = __webpack_require__(3);
 
 var _transaction2 = _interopRequireDefault(_transaction);
 
-var _inventory = __webpack_require__(3);
+var _inventory = __webpack_require__(4);
 
 var _inventory2 = _interopRequireDefault(_inventory);
 
@@ -208,7 +233,7 @@ var Store = function () {
 exports.default = Store;
 
 /***/ }),
-/* 2 */
+/* 3 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -303,7 +328,7 @@ var Transaction = function () {
 exports.default = Transaction;
 
 /***/ }),
-/* 3 */
+/* 4 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -315,7 +340,7 @@ Object.defineProperty(exports, "__esModule", {
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _item = __webpack_require__(4);
+var _item = __webpack_require__(5);
 
 var _item2 = _interopRequireDefault(_item);
 
@@ -331,7 +356,7 @@ var Inventory = function () {
       items = {};
     }
     this.items = items;
-    this.discounts = discounts;
+    // this.discounts = discounts;
   }
 
   _createClass(Inventory, [{
@@ -386,7 +411,7 @@ var Inventory = function () {
 exports.default = Inventory;
 
 /***/ }),
-/* 4 */
+/* 5 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -398,7 +423,7 @@ Object.defineProperty(exports, "__esModule", {
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _discount = __webpack_require__(5);
+var _discount = __webpack_require__(6);
 
 var _discount2 = _interopRequireDefault(_discount);
 
@@ -413,11 +438,11 @@ var Item = function () {
     this.name = item.name;
     this.price = item.price;
     this.quantity = item.quantity;
-    // if (item.discount){
-    //   this.discount = new Discount(item.discount);
-    // } else {
-    //   this.discount = null;
-    // }
+    if (item.discount) {
+      this.discount = new _discount2.default(item.discount);
+    } else {
+      this.discount = null;
+    }
   }
 
   _createClass(Item, [{
@@ -438,7 +463,7 @@ var Item = function () {
 exports.default = Item;
 
 /***/ }),
-/* 5 */
+/* 6 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";

@@ -5,11 +5,11 @@ export default class Item {
     this.name = item.name;
     this.price = item.price;
     this.quantity = item.quantity;
-    // if (item.discount){
-    //   this.discount = new Discount(item.discount);
-    // } else {
-    //   this.discount = null;
-    // }
+    if (item.discount){
+      this.discount = new Discount(item.discount);
+    } else {
+      this.discount = null;
+    }
   }
 
   addDiscount(discount){
