@@ -78,15 +78,15 @@ var _createClass = function () { function defineProperties(target, props) { for 
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-var Discounts = function () {
-  function Discounts(amount, quantity) {
-    _classCallCheck(this, Discounts);
+var Discount = function () {
+  function Discount(amount, quantity) {
+    _classCallCheck(this, Discount);
 
     this.quantity = quantity;
     this.amount = amount;
   }
 
-  _createClass(Discounts, [{
+  _createClass(Discount, [{
     key: "calculateItemDiscount",
     value: function calculateItemDiscount(discount, itemQuantity) {
       var currentDiscountQuantity = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 0;
@@ -116,10 +116,10 @@ var Discounts = function () {
     }
   }]);
 
-  return Discounts;
+  return Discount;
 }();
 
-exports.default = Discounts;
+exports.default = Discount;
 
 /***/ }),
 /* 1 */

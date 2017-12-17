@@ -1,4 +1,4 @@
-export default class Discounts {
+export default class Discount {
   constructor(amount, quantity){
     this.quantity = quantity;
     this.amount = amount;
