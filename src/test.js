@@ -18,7 +18,7 @@ const runTests = () =>{
   store.inventory.addItemDiscount("C", 1.5, 6);
 
   store.newTransaction();
-    console.log("Scans items in arbitrary order, and applies discount on item A");
+    console.log("Scans items in arbitrary order, and applies discount on item A (Example Cart 1)");
       let cart1 = ["A", "B", "C", "D", "A", "B", "A", "A"];
       cart1.forEach(item => {
         store.scan(item);
@@ -27,7 +27,7 @@ const runTests = () =>{
   store.closeTransaction();
 
   store.newTransaction();
-    console.log("Computes the total with one instance of discount on Item C");
+    console.log("Computes the total with one instance of discount on Item C (Example Cart 2)");
       let cart2 = ["C", "C", "C", "C", "C", "C", "C"];
       cart2.forEach(item => {
         store.scan(item);
@@ -40,7 +40,7 @@ const runTests = () =>{
   store.closeTransaction();
 
   store.newTransaction();
-    console.log("Correctly computes a cart containing one of each item");
+    console.log("Correctly computes a cart containing one of each item (Example Cart 3)");
       let cart3 = ["A", "B", "C", "D"];
       cart3.forEach(item => {
         store.scan(item);
