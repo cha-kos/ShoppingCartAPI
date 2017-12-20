@@ -1,9 +1,9 @@
-## ShoppingCartAPI
+ ## ShoppingCartAPI
 
-###Overview
+### Overview
 
-I solved this challenge with OOP based JavaScript using ES6 Classes. To effectively
-create the desired functionality I designed this API using five class Objects. The
+This is a simple Shopping Cart API built using JavaScript's ES6 Classes. To effectively
+create the desired functionality, this API includes five class Objects. The
 class hierarchy can be illustrated as follows:
   - Store
     - Transaction
@@ -30,13 +30,13 @@ and install the package dependencies by running the command `npm install`. Once
 you have the dependencies installed, you can run the test by following the directions
 outlined in the next section.
 
-###Running Tests
+### Running Tests
 You can run the existing tests by typing the command `node bundle.js` into your command line.
 
 The `runTests()` function will be executed from within the `entry.js` file. Each test case
 will print out on one line, and the result of the test case on the following line.
 
-###Building Tests
+### Building Tests
 You can find the existing tests in the `test.js` file located in the `src` folder.
 Inside of the `test.js` file you can see an example Store class named `store` is built inside
 of the enclosing `runTests()` function. The tests themselves can be found below the
