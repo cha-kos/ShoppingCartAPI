@@ -153,10 +153,6 @@ var _store2 = _interopRequireDefault(_store);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-// on the right track, maybe add more stuff
-// add expectation messages, success messages, failure messages
-
-
 var runTests = function runTests() {
   var store = new _store2.default();
   var itemA = { name: "A", price: 2.00, quantity: 100 };
@@ -228,10 +224,6 @@ var runTests = function runTests() {
   console.log(store.currentTransaction === null);
 };
 exports.default = runTests;
-
-// outline what logic it is testing i.e.
-// add > remove > add
-// double wholesale discount
 
 /***/ }),
 /* 3 */

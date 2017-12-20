@@ -1,9 +1,5 @@
 import Store from "./store";
 
-// on the right track, maybe add more stuff
-// add expectation messages, success messages, failure messages
-
-
 const runTests = () =>{
   let store = new Store();
   let itemA = {name: "A", price: 2.00, quantity: 100};
@@ -76,8 +72,3 @@ const runTests = () =>{
       console.log(store.currentTransaction === null);
 };
 export default runTests;
-
-
-// outline what logic it is testing i.e.
-// add > remove > add
-// double wholesale discount

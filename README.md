@@ -3,7 +3,7 @@
 ###Overview
 
 I solved this challenge with OOP based JavaScript using ES6 Classes. To effectively
-create the desired functionality I designed this API using five class Objects. These
+create the desired functionality I designed this API using five class Objects. The
 class hierarchy can be illustrated as follows:
   - Store
     - Transaction
@@ -40,7 +40,7 @@ will print out on one line, and the result of the test case on the following lin
 You can find the existing tests in the `test.js` file located in the `src` folder.
 Inside of the `test.js` file you can see an example Store class named `store` is built inside
 of the enclosing `runTests()` function. The tests themselves can be found below the
-logic that builds our `store`.
+logic that builds `store`.
 
 Before adding any additional tests, please make sure that Webpack and Babel are actively
 compiling any new additions to the `test.js` file. You can do so by going to your terminal and
